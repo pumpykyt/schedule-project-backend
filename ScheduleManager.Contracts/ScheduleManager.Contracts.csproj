@@ -10,9 +10,4 @@
       <PackageReference Include="FluentValidation.AspNetCore" Version="11.0.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Requests" />
-      <Folder Include="Responses" />
-    </ItemGroup>
-
 </Project>

@@ -1,4 +1,5 @@
 using FastEndpoints;
+using FastEndpoints.Swagger;
 using Microsoft.EntityFrameworkCore;
 using ScheduleManager.Data;
 using ScheduleManager.Domain.Configs;
@@ -9,6 +10,7 @@ using ScheduleManager.Domain.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddFastEndpoints();
+builder.Services.AddSwaggerDoc();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors(options =>
 {
@@ -17,7 +19,7 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
     });
 });
-builder.Services.AddSwaggerGen();
+
 
 var connectionString = builder.Configuration.GetSection("ConnectionString").Value;
 builder.Services.AddDbContext<DataContext>(a => a.UseNpgsql(connectionString,
@@ -28,6 +30,7 @@ builder.Services.Configure<JwtConfig>(jwtConfig);
 
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IGroupService, GroupService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 var app = builder.Build();
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
@@ -39,7 +42,7 @@ app.UseFastEndpoints();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseFileServer();
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseOpenApi();
+app.UseSwaggerUi3();
 
 app.Run();

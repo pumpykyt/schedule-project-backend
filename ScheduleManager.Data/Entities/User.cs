@@ -8,5 +8,6 @@ public class User : BaseEntity
     public string? ImagePath { get; set; }
     public string Fullname { get; set; }
     public int Age { get; set; }
+    public string Role { get; set; }
     public virtual Group Group { get; set; }
 }

@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ScheduleManager.Contracts\ScheduleManager.Contracts.csproj" />
       <ProjectReference Include="..\ScheduleManager.Data\ScheduleManager.Data.csproj" />
       <ProjectReference Include="..\ScheduleManager.Domain\ScheduleManager.Domain.csproj" />
     </ItemGroup>

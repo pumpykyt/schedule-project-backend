@@ -31,6 +31,7 @@ builder.Services.Configure<JwtConfig>(jwtConfig);
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IScheduleEventService, ScheduleEventService>();
 var app = builder.Build();
 
 app.UseMiddleware<ErrorHandlerMiddleware>();

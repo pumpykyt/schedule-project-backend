@@ -1,4 +1,4 @@
-﻿namespace ScheduleManager.Contracts.Requests;
+﻿namespace ScheduleManager.Contracts.Responses;
 
 public class GroupResponse
 {

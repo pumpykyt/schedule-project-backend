@@ -129,4 +129,47 @@ public static class MappingExtensions
             ScheduleId = model.ScheduleId
         };
     }
+
+    public static Activity MapToEntity(this ActivityCreateRequest model)
+    {
+        return new Activity
+        {
+            Name = model.Name,
+            TeacherEmail = model.TeacherEmail,
+            TeacherName = model.TeacherName
+        };
+    }
+
+    public static Activity MapToEntity(this ActivityUpdateRequest model)
+    {
+        return new Activity
+        {
+            Id = model.Id,
+            Name = model.Name,
+            TeacherEmail = model.TeacherEmail,
+            TeacherName = model.TeacherName
+        };
+    }
+
+    public static ActivityResponse MapToResponse(this Activity entity)
+    {
+        return new ActivityResponse
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            TeacherEmail = entity.TeacherEmail,
+            TeacherName = entity.TeacherName
+        };
+    }
+    public static List<ActivityResponse> MapToResponseList(this List<Activity> entities)
+    {
+        return entities.Select(t => new ActivityResponse
+        {
+            Id = t.Id,
+            Name = t.Name,
+            TeacherEmail = t.TeacherEmail,
+            TeacherName = t.TeacherName
+        }).ToList();
+    }
+    
 }

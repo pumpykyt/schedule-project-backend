@@ -32,6 +32,7 @@ builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IScheduleEventService, ScheduleEventService>();
+builder.Services.AddScoped<IActivityService, ActivityService>();
 var app = builder.Build();
 
 app.UseMiddleware<ErrorHandlerMiddleware>();

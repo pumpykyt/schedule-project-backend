@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Microsoft.EntityFrameworkCore;
 using ScheduleManager.Contracts.Requests;
+using ScheduleManager.Contracts.Responses;
 using ScheduleManager.Data;
 using ScheduleManager.Domain.Exceptions;
 using ScheduleManager.Domain.Interfaces;

@@ -1,10 +1,11 @@
 ﻿using FastEndpoints;
 using ScheduleManager.Contracts.Requests;
+using ScheduleManager.Contracts.Responses;
 using ScheduleManager.Domain.Interfaces;
 
 namespace ScheduleManager.Web.Endpoints.Group;
 
-public class GetGroupEndpoint : Endpoint<GroupIdRequest>
+public class GetGroupEndpoint : Endpoint<GroupIdRequest, GroupResponse>
 {
     private readonly IGroupService _groupService;
 

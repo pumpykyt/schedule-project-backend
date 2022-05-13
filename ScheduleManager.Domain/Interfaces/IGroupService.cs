@@ -1,4 +1,5 @@
 ﻿using ScheduleManager.Contracts.Requests;
+using ScheduleManager.Contracts.Responses;
 
 namespace ScheduleManager.Domain.Interfaces;
 

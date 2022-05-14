@@ -45,10 +45,13 @@ public class AuthService : IAuthService
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password),
             Age = model.Age,
             GroupId = model.GroupId,
-            ImagePath = await ImageHelper.SaveImageAsync(model.Base64),
             Fullname = model.Fullname,
             Role = RoleConstraints.UserRole
         };
+        if (!string.IsNullOrEmpty(model.Base64))
+        {
+            newUser.ImagePath = await ImageHelper.SaveImageAsync(model.Base64);
+        }
         await _context.Users.AddAsync(newUser);
         var result = await _context.SaveChangesAsync();
         if (result == 0) throw new HttpException(HttpStatusCode.InternalServerError, "Server error");

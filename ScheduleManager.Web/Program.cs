@@ -1,5 +1,6 @@
 using FastEndpoints;
 using FastEndpoints.Swagger;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using ScheduleManager.Data;
 using ScheduleManager.Domain.Configs;

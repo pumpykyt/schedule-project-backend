@@ -7,6 +7,7 @@ using ScheduleManager.Domain.Configs;
 using ScheduleManager.Domain.Interfaces;
 using ScheduleManager.Domain.Middlewares;
 using ScheduleManager.Domain.Services;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,12 @@ builder.Services.AddCors(options =>
 var connectionString = builder.Configuration.GetSection("ConnectionString").Value;
 builder.Services.AddDbContext<DataContext>(a => a.UseNpgsql(connectionString,
                                            b => b.MigrationsAssembly("ScheduleManager.Web")));
+
+var logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).Enrich
+    .FromLogContext()
+    .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 var jwtConfig = builder.Configuration.GetSection("JwtConfig");
 builder.Services.Configure<JwtConfig>(jwtConfig);

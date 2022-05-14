@@ -2,4 +2,14 @@
 	<s:String x:Key="/Default/CodeInspection/PencilsConfiguration/ActualSeverity/@EntryValue">ERROR</s:String>
 	<s:String x:Key="/Default/CodeInspection/PencilsConfiguration/FiltersState/=SpellingFilter/@EntryIndexedValue">On</s:String>
 	<s:String x:Key="/Default/CodeInspection/PencilsConfiguration/FiltersState/=NamingFilter/@EntryIndexedValue">On</s:String>
-	<s:String x:Key="/Default/CodeInspection/PencilsConfiguration/FiltersState/=CodeStyle/@EntryIndexedValue">On</s:String></wpf:ResourceDictionary>
+	<s:String x:Key="/Default/CodeInspection/PencilsConfiguration/FiltersState/=CodeStyle/@EntryIndexedValue">On</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5ff1560d_002D5409_002D4348_002Dbb37_002Df0ec66699279/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetActivityAsync" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::B340A1E5-727F-4E38-B880-33EB12DBEC18::net6.0::ScheduleManager.Tests.ActivityServiceTests.CreateActivityTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::B340A1E5-727F-4E38-B880-33EB12DBEC18::net6.0::ScheduleManager.Tests.ScheduleServiceTests.GetScheduleTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::B340A1E5-727F-4E38-B880-33EB12DBEC18::net6.0::ScheduleManager.Tests.ScheduleServiceTests.CreateScheduleTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::B340A1E5-727F-4E38-B880-33EB12DBEC18::net6.0::ScheduleManager.Tests.ScheduleServiceTests.UpdateScheduleTask&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::B340A1E5-727F-4E38-B880-33EB12DBEC18::net6.0::ScheduleManager.Tests.ScheduleServiceTests.DeleteSchedule&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	</wpf:ResourceDictionary>

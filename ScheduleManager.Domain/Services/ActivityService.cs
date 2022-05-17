@@ -39,5 +39,21 @@ public class ActivityService : IActivityService
             .ToListAsync();
         return entities.MapToResponseList();
     }
-    
+
+    public async Task UpdateActivityAsync(ActivityUpdateRequest model)
+    {
+        var oldEntity = await _context.Activities.SingleOrDefaultAsync(t => t.Id == model.Id);
+        var newEntity = model.MapToEntity();
+        _context.Entry(oldEntity).CurrentValues.SetValues(newEntity);
+        var result = await _context.SaveChangesAsync();
+        if (result == 0) throw new HttpException(HttpStatusCode.InternalServerError, "Server error");
+    }
+
+    public async Task DeleteActivityAsync(string id)
+    {
+        var entity = await _context.Activities.SingleOrDefaultAsync(t => t.Id == id);
+        _context.Activities.Remove(entity);
+        var result = await _context.SaveChangesAsync();
+        if (result == 0) throw new HttpException(HttpStatusCode.InternalServerError, "Server error");
+    }
 }

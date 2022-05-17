@@ -10,6 +10,7 @@
     &lt;TestId&gt;xUnit::B340A1E5-727F-4E38-B880-33EB12DBEC18::net6.0::ScheduleManager.Tests.ScheduleServiceTests.CreateScheduleTest&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::B340A1E5-727F-4E38-B880-33EB12DBEC18::net6.0::ScheduleManager.Tests.ScheduleServiceTests.UpdateScheduleTask&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::B340A1E5-727F-4E38-B880-33EB12DBEC18::net6.0::ScheduleManager.Tests.ScheduleServiceTests.DeleteSchedule&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::B340A1E5-727F-4E38-B880-33EB12DBEC18::net6.0::ScheduleManager.Tests.ActivityServiceTests.GetActivityTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	</wpf:ResourceDictionary>

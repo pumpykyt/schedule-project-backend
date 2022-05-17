@@ -4,13 +4,12 @@ using ScheduleManager.Contracts.Requests;
 
 namespace ScheduleManager.Web.Validators;
 
-public class ScheduleValidator : Validator<ScheduleCreateRequest>
+public class ScheduleCreateValidator : Validator<ScheduleCreateRequest>
 {
-    public ScheduleValidator()
+    public ScheduleCreateValidator()
     {
         RuleFor(t => t.Name)
             .NotNull().WithMessage("Name is null")
-            .NotEmpty().WithMessage("Name is empty")
-            .Length(1, 250);
-    }       
+            .NotEmpty().WithMessage("Name is empty");
+    }
 }

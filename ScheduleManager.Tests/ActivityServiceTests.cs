@@ -22,7 +22,7 @@ public class ActivityServiceTests
         _context = new DataContext(dbOptions);
         _activityService = new ActivityService(_context);
     }
-
+    
     [Fact]
     public async Task GetActivityTest()
     {

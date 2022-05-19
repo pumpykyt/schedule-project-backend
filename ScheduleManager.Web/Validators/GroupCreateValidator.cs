@@ -12,4 +12,4 @@ public class GroupCreateValidator : Validator<GroupCreateRequest>
             .NotNull().WithMessage("Name is null")
             .NotEmpty().WithMessage("Name is empty");
     }
-}
+} 

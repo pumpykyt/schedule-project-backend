@@ -20,4 +20,4 @@ public class ActivityCreateValidator : Validator<ActivityCreateRequest>
             .NotNull().WithMessage("Teacher name is null")
             .NotEmpty().WithMessage("Teacher name is empty");
     }
-}
+} 

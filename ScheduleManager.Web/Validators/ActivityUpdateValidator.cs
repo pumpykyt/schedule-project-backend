@@ -20,4 +20,4 @@ public class ActivityUpdateValidator : Validator<ActivityUpdateRequest>
             .NotNull().WithMessage("Teacher email is null")
             .NotEmpty().WithMessage("Teacher email is empty");
     }
-}
+} 

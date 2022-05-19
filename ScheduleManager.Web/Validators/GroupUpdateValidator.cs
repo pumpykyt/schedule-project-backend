@@ -12,4 +12,4 @@ public class GroupUpdateValidator : Validator<GroupUpdateRequest>
             .NotNull().WithMessage("Name is null")
             .NotEmpty().WithMessage("Name is empty");
     }
-}
+} 

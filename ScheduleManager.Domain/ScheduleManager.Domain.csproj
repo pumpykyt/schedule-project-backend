@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <PackageReference Include="BCrypt.Net" Version="0.1.0" />
+      <PackageReference Include="Hangfire.AspNetCore" Version="1.7.28" />
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.15" />
       <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.17.0" />

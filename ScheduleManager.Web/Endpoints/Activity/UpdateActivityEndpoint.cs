@@ -13,7 +13,7 @@ public class UpdateActivityEndpoint : Endpoint<ActivityUpdateRequest>
     public override void Configure()
     {
         Verbs(Http.PUT);
-        Routes("api/group");
+        Routes("api/activity");
         AllowAnonymous();
     }
 

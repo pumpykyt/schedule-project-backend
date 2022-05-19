@@ -3,8 +3,10 @@ using FastEndpoints.Swagger;
 using FluentValidation.AspNetCore;
 using Hangfire;
 using Hangfire.PostgreSql;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ScheduleManager.Data;
+using ScheduleManager.Data.Handlers;
 using ScheduleManager.Domain.Configs;
 using ScheduleManager.Domain.Interfaces;
 using ScheduleManager.Domain.Middlewares;
@@ -44,7 +46,7 @@ builder.Services.AddHangfireServer();
 
 var jwtConfig = builder.Configuration.GetSection("JwtConfig");
 builder.Services.Configure<JwtConfig>(jwtConfig);
-
+builder.Services.AddMediatR(typeof(CreateActivityHandler));
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IAuthService, AuthService>();

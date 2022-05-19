@@ -59,5 +59,49 @@ public class ActivityServiceTests
         Assert.NotNull(result);
         Assert.Equal(model.Name, result.Name);
     }
+    [Fact]
+    public async Task DeleteActivityTest()
+    {
+        //Arrange
+        await _context.Activities.AddAsync(new Activity
+        {
+        Id = "333",
+        Name = "testUnique",
+        TeacherName = "TestOksana",
+        TeacherEmail = "Test@gmail.com"
+        });
+        await _context.SaveChangesAsync();
+        //Act
+        await _activityService.DeleteActivityAsync("333");
+        //Assert
+        var entity = await _context.Activities.SingleOrDefaultAsync(t => t.Id == "333");
+        Assert.Null(entity);
+    }
+    [Fact]
+    public async Task UpdateScheduleTask()
+    {
+        //Arrange
+        await _context.Activities.AddAsync(new Activity
+        {
+            Id = "123",
+            Name = "Test",
+            TeacherName = "Test",
+            TeacherEmail = "Test@gmail.com"
+        });
+        var model = new ActivityUpdateRequest
+        {
+            Id = "123",
+            Name = "Updated",
+            TeacherName = "UpdatedName",
+            TeacherEmail = "Updated@gmail.com"
+        };
+        await _context.SaveChangesAsync();
+        //Act
+        await _activityService.UpdateActivityAsync(model);
+        //Assert
+        var result = await _context.Activities.SingleOrDefaultAsync(t => t.Name == model.Name);
+        Assert.NotNull(result);
+        Assert.Equal(model.Name, result.Name);
+    }
     
 }

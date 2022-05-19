@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using ScheduleManager.Contracts.Requests;
 using ScheduleManager.Contracts.Responses;
@@ -22,6 +23,8 @@ public class ScheduleEventService : IScheduleEventService
     {
         var newScheduleEvent = model.MapToEntity();
         newScheduleEvent.Id = Guid.NewGuid().ToString();
+        newScheduleEvent.JobId = BackgroundJob.Schedule(() => DeleteScheduleEventAsync(newScheduleEvent.Id), 
+                                                              newScheduleEvent.End.AddDays(7));
         await _context.ScheduleEvents.AddAsync(newScheduleEvent);
         var result = await _context.SaveChangesAsync();
         if (result == 0) throw new HttpException(HttpStatusCode.InternalServerError, "Server error");
@@ -55,6 +58,7 @@ public class ScheduleEventService : IScheduleEventService
     public async Task DeleteScheduleEventAsync(string id)
     {
         var entity = await _context.ScheduleEvents.AsNoTracking().SingleOrDefaultAsync(t => t.Id == id);
+        BackgroundJob.Delete(entity.JobId);
         _context.Remove(entity);
         var result = await _context.SaveChangesAsync();
         if (result == 0) throw new HttpException(HttpStatusCode.InternalServerError, "Server error");

@@ -8,4 +8,6 @@ public interface IActivityService
     Task CreateActivityAsync(ActivityCreateRequest model);
     Task<ActivityResponse> GetActivityAsync(string id);
     Task<List<ActivityResponse>> GetActivitiesAsync(int pageNumber, int pageSize);
+    Task UpdateActivityAsync(ActivityUpdateRequest model);
+    Task DeleteActivityAsync(string id);
 }

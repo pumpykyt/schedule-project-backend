@@ -1,6 +1,8 @@
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using FluentValidation.AspNetCore;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 using ScheduleManager.Data;
 using ScheduleManager.Domain.Configs;
@@ -25,13 +27,20 @@ builder.Services.AddCors(options =>
 
 var connectionString = builder.Configuration.GetSection("ConnectionString").Value;
 builder.Services.AddDbContext<DataContext>(a => a.UseNpgsql(connectionString,
-                                           b => b.MigrationsAssembly("ScheduleManager.Web")));
+    b => b.MigrationsAssembly("ScheduleManager.Web")));
 
 var logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).Enrich
     .FromLogContext()
     .CreateLogger();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
+builder.Services.AddHangfire(cfg => cfg
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UsePostgreSqlStorage(connectionString)
+);
+builder.Services.AddHangfireServer();
 
 var jwtConfig = builder.Configuration.GetSection("JwtConfig");
 builder.Services.Configure<JwtConfig>(jwtConfig);
@@ -54,5 +63,10 @@ app.UseStaticFiles();
 app.UseFileServer();
 app.UseOpenApi();
 app.UseSwaggerUi3();
+app.UseHangfireDashboard();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHangfireDashboard();
+});
 
 app.Run();

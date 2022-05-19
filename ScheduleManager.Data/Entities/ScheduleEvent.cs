@@ -7,6 +7,7 @@ public class ScheduleEvent : BaseEntity
     public string Type { get; set; }
     public string ActivityId { get; set; }
     public string ScheduleId { get; set; }
+    public string JobId { get; set; }
     public virtual Schedule Schedule { get; set; }
     public virtual Activity Activity { get; set; }
 }

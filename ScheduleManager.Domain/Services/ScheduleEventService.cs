@@ -1,9 +1,12 @@
 ﻿using System.Net;
 using Hangfire;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ScheduleManager.Contracts.Requests;
 using ScheduleManager.Contracts.Responses;
 using ScheduleManager.Data;
+using ScheduleManager.Data.Commands;
+using ScheduleManager.Data.Queries;
 using ScheduleManager.Domain.Exceptions;
 using ScheduleManager.Domain.Interfaces;
 using ScheduleManager.Domain.Mapping;
@@ -12,12 +15,9 @@ namespace ScheduleManager.Domain.Services;
 
 public class ScheduleEventService : IScheduleEventService
 {
-    private readonly DataContext _context;
+    private readonly IMediator _mediator;
     
-    public ScheduleEventService(DataContext context)
-    {
-        _context = context;
-    }
+    public ScheduleEventService(IMediator mediator) => _mediator = mediator;
 
     public async Task CreateScheduleEventAsync(ScheduleEventCreateRequest model)
     {
@@ -25,42 +25,39 @@ public class ScheduleEventService : IScheduleEventService
         newScheduleEvent.Id = Guid.NewGuid().ToString();
         newScheduleEvent.JobId = BackgroundJob.Schedule(() => DeleteScheduleEventAsync(newScheduleEvent.Id), 
                                                               newScheduleEvent.End.AddDays(7));
-        await _context.ScheduleEvents.AddAsync(newScheduleEvent);
-        var result = await _context.SaveChangesAsync();
+        await _mediator.Send(new CreateScheduleEventCommand(newScheduleEvent));
+        var result = await _mediator.Send(new SaveChangesCommand());
         if (result == 0) throw new HttpException(HttpStatusCode.InternalServerError, "Server error");
     }
 
     public async Task<ScheduleEventResponse> GetScheduleEventByIdAsync(string id)
     {
-        var entity = await _context.ScheduleEvents.AsNoTracking().SingleOrDefaultAsync(t => t.Id == id);
+        var entity = await _mediator.Send(new GetScheduleEventQuery(id));
         return entity.MapToResponse();
     }
 
     public async Task<List<ScheduleEventResponse>> GetScheduleEventsAsync(int pageNumber, int pageSize)
     {
-        var entities = await _context.ScheduleEvents.AsNoTracking()
-                                                    .Skip((pageNumber - 1) * pageSize)
-                                                    .Take(pageSize)
-                                                    .ToListAsync();
+        var entities = await _mediator.Send(new GetScheduleEventsQuery(pageNumber, pageSize));
         return entities.MapToResponseList();
     }
 
     public async Task UpdateScheduleEventAsync(ScheduleEventUpdateRequest model)
     {
-        var oldEntity = await _context.ScheduleEvents.AsNoTracking().SingleOrDefaultAsync(t => t.Id == model.Id);
+        var oldEntity = await _mediator.Send(new GetScheduleEventQuery(model.Id));
         var newEntity = model.MapToEntity();
-        _context.Entry(oldEntity).CurrentValues.SetValues(newEntity);
-        var result = await _context.SaveChangesAsync();
+        _mediator.Send(new UpdateScheduleEventCommand(oldEntity, newEntity));
+        var result = await _mediator.Send(new SaveChangesCommand());
         if (result == 0) throw new HttpException(HttpStatusCode.InternalServerError, "Server error");
 
     }
 
     public async Task DeleteScheduleEventAsync(string id)
     {
-        var entity = await _context.ScheduleEvents.AsNoTracking().SingleOrDefaultAsync(t => t.Id == id);
+        var entity = await _mediator.Send(new GetScheduleEventQuery(id));
         BackgroundJob.Delete(entity.JobId);
-        _context.Remove(entity);
-        var result = await _context.SaveChangesAsync();
+        _mediator.Send(new DeleteScheduleEventCommand(entity));
+        var result = await _mediator.Send(new SaveChangesCommand());
         if (result == 0) throw new HttpException(HttpStatusCode.InternalServerError, "Server error");
     }
 }

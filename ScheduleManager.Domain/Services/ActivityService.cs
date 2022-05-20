@@ -16,10 +16,7 @@ public class ActivityService : IActivityService
 {
     private readonly IMediator _mediator;
 
-    public ActivityService(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    public ActivityService(IMediator mediator) => _mediator = mediator;
 
     public async Task CreateActivityAsync(ActivityCreateRequest model)
     {

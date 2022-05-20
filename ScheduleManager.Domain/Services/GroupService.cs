@@ -16,10 +16,7 @@ public class GroupService : IGroupService
 {
     private readonly IMediator _mediator;
 
-    public GroupService(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    public GroupService(IMediator mediator) => _mediator = mediator;
 
     public async Task CreateGroupAsync(GroupCreateRequest model)
     {

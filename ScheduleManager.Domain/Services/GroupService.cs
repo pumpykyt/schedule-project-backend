@@ -1,8 +1,11 @@
 ﻿using System.Net;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ScheduleManager.Contracts.Requests;
 using ScheduleManager.Contracts.Responses;
 using ScheduleManager.Data;
+using ScheduleManager.Data.Commands;
+using ScheduleManager.Data.Queries;
 using ScheduleManager.Domain.Exceptions;
 using ScheduleManager.Domain.Interfaces;
 using ScheduleManager.Domain.Mapping;
@@ -11,51 +14,48 @@ namespace ScheduleManager.Domain.Services;
 
 public class GroupService : IGroupService
 {
-    private readonly DataContext _context;
+    private readonly IMediator _mediator;
 
-    public GroupService(DataContext context)
+    public GroupService(IMediator mediator)
     {
-        _context = context;
+        _mediator = mediator;
     }
 
     public async Task CreateGroupAsync(GroupCreateRequest model)
     {
         var newGroup = model.MapToEntity();
         newGroup.Id = Guid.NewGuid().ToString();
-        await _context.Groups.AddAsync(newGroup);
-        var result = await _context.SaveChangesAsync();
+        await _mediator.Send(new CreateGroupCommand(newGroup));
+        var result = await _mediator.Send(new SaveChangesCommand());
         if (result == 0) throw new HttpException(HttpStatusCode.InternalServerError, "Server error");
     }
 
     public async Task<GroupResponse> GetGroupByIdAsync(string id)
     {
-        var entity = await _context.Groups.AsNoTracking().SingleOrDefaultAsync(t => t.Id == id);
+        var entity = await _mediator.Send(new GetGroupQuery(id));
         return entity.MapToResponse();
     }
 
     public async Task<List<GroupResponse>> GetGroupsAsync(int pageNumber, int pageSize)
     {
-        var entities = await _context.Groups.AsNoTracking()
-                                            .Skip((pageNumber - 1) * pageSize)
-                                            .Take(pageSize)
-                                            .ToListAsync();
+        var entities = await _mediator.Send(new GetGroupsQuery(pageNumber, pageSize));
         return entities.MapToResponseList();
     }
 
     public async Task UpdateGroupAsync(GroupUpdateRequest model)
     {
-        var oldEntity = await _context.Groups.SingleOrDefaultAsync(t => t.Id == model.Id);
+        var oldEntity = await _mediator.Send(new GetGroupQuery(model.Id));
         var newEntity = model.MapToEntity();
-        _context.Entry(oldEntity).CurrentValues.SetValues(newEntity);
-        var result = await _context.SaveChangesAsync();
+        await _mediator.Send(new UpdateGroupCommand(oldEntity, newEntity));
+        var result = await _mediator.Send(new SaveChangesCommand());
         if (result == 0) throw new HttpException(HttpStatusCode.InternalServerError, "Server error");
     }
 
     public async Task DeleteGroupAsync(string id)
     {
-        var entity = await _context.Groups.SingleOrDefaultAsync(t => t.Id == id);
-        _context.Groups.Remove(entity);
-        var result = await _context.SaveChangesAsync();
+        var entity = await _mediator.Send(new GetGroupQuery(id));
+        _mediator.Send(new DeleteGroupCommand(entity));
+        var result = await _mediator.Send(new SaveChangesCommand());
         if (result == 0) throw new HttpException(HttpStatusCode.InternalServerError, "Server error");
     }
 }

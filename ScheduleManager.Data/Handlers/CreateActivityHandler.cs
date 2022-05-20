@@ -7,14 +7,11 @@ public class CreateActivityHandler : IRequestHandler<CreateActivityCommand>
 {
     private readonly DataContext _context;
 
-    public CreateActivityHandler(DataContext context)
-    {
-        _context = context;
-    }
-    
+    public CreateActivityHandler(DataContext context) => _context = context;
+
     public async Task<Unit> Handle(CreateActivityCommand request, CancellationToken cancellationToken)
     {
-        await _context.Activities.AddAsync(request.Entity);
+        await _context.Activities.AddAsync(request.entity);
         return Unit.Value;
     }
 }

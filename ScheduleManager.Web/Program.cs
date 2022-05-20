@@ -3,8 +3,13 @@ using FastEndpoints.Swagger;
 using FluentValidation.AspNetCore;
 using Hangfire;
 using Hangfire.PostgreSql;
+using k8s.KubeConfigModels;
 using MediatR;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using ScheduleManager.Contracts.Models;
+using ScheduleManager.Contracts.Responses;
 using ScheduleManager.Data;
 using ScheduleManager.Data.Handlers;
 using ScheduleManager.Domain.Configs;
@@ -52,6 +57,10 @@ builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IScheduleEventService, ScheduleEventService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
+
+builder.Services.AddHealthChecks().AddDbContextCheck<DataContext>();
+builder.Services.AddHealthChecksUI().AddInMemoryStorage();
+
 var app = builder.Build();
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
@@ -69,6 +78,27 @@ app.UseHangfireDashboard();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapHangfireDashboard();
+    endpoints.MapHealthChecks("/healthcheck", new HealthCheckOptions()
+    {
+        ResponseWriter = async (context, report) =>
+        {
+            context.Response.ContentType = "application/json";
+            var response = new HealthCheckResponse
+            {
+                Status = report.Status.ToString(),
+                Checks = report.Entries.Select(t => new HealthCheck
+                {
+                    Component = t.Key,
+                    Status = t.Value.Status.ToString(),
+                    Description = t.Value.Description
+                }),
+                Duration = report.TotalDuration
+            };
+
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+        }
+    });
+    endpoints.MapHealthChecksUI();
 });
 
 app.Run();

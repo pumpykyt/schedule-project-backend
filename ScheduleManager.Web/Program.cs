@@ -1,3 +1,4 @@
+using System.Text;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using FluentValidation.AspNetCore;
@@ -5,8 +6,10 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using k8s.KubeConfigModels;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using ScheduleManager.Contracts.Models;
 using ScheduleManager.Contracts.Responses;
@@ -57,6 +60,25 @@ builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IScheduleEventService, ScheduleEventService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
+
+builder.Services.AddAuthentication(x => { 
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; 
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; 
+}).AddJwtBearer(x =>
+{
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration.GetValue<string>("JwtConfig:Audience"),
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration.GetValue<string>("JwtConfig:Issuer"),
+        RequireExpirationTime = false,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey =
+            new SymmetricSecurityKey(
+                Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("JwtConfig:Secret")))
+    };
+});
 
 builder.Services.AddHealthChecks().AddDbContextCheck<DataContext>();
 builder.Services.AddHealthChecksUI().AddInMemoryStorage();

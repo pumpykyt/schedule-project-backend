@@ -16,7 +16,8 @@ public class ScheduleEventCreateValidator : Validator<ScheduleEventCreateRequest
         RuleFor(t => t.End)
             .NotNull().WithMessage("End date is null")
             .NotEmpty().WithMessage("End date is empty")
-            .GreaterThanOrEqualTo(DateTime.Now);
+            .GreaterThanOrEqualTo(DateTime.Now)
+            .GreaterThan(t => t.Start);
 
         RuleFor(t => t.Type)
             .NotNull().WithMessage("Type is null")

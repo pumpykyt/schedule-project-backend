@@ -6,7 +6,7 @@ using ScheduleManager.Domain.Interfaces;
 
 namespace ScheduleManager.Web.Endpoints.Schedule;
 
-public class GetSchedulesEndpoint : Endpoint<PagedRequest, List<ScheduleResponse>>
+public class GetSchedulesEndpoint : EndpointWithoutRequest<List<ScheduleResponse>>
 {
     private readonly IScheduleService _scheduleService;
 
@@ -15,10 +15,19 @@ public class GetSchedulesEndpoint : Endpoint<PagedRequest, List<ScheduleResponse
     public override void Configure()
     {
         Verbs(Http.GET);
-        Routes("api/schedule/{pageNumber}/{pageSize}");
+        Routes("api/schedule/{pageNumber}/{pageSize}/{search}/{sort}");
         AllowAnonymous();
     }
 
-    public override async Task HandleAsync(PagedRequest req, CancellationToken ct)
-        => await SendAsync(await _scheduleService.GetSchedulesAsync(req.PageNumber, req.PageSize));
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        var pageNumber = Route<int>("pageNumber");
+        var pageSize = Route<int>("pageSize");
+        var search = Route<string>("search");
+        var sort = Route<string>("sort");
+
+        var result = await _scheduleService.GetSchedulesAsync(pageNumber, pageSize, search, sort);
+        await SendAsync(result);
+    }
+        
 }

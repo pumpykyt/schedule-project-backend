@@ -33,9 +33,9 @@ public class GroupService : IGroupService
         return entity.MapToResponse();
     }
 
-    public async Task<List<GroupResponse>> GetGroupsAsync(int pageNumber, int pageSize)
+    public async Task<List<GroupResponse>> GetGroupsAsync(int pageNumber, int pageSize, string search, string sort)
     {
-        var entities = await _mediator.Send(new GetGroupsQuery(pageNumber, pageSize));
+        var entities = await _mediator.Send(new GetGroupsQuery(pageNumber, pageSize, search, sort));
         return entities.MapToResponseList();
     }
 

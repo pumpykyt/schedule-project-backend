@@ -36,9 +36,10 @@ public class ScheduleEventService : IScheduleEventService
         return entity.MapToResponse();
     }
 
-    public async Task<List<ScheduleEventResponse>> GetScheduleEventsAsync(int pageNumber, int pageSize)
+    public async Task<List<ScheduleEventResponse>> GetScheduleEventsAsync(int pageNumber, int pageSize,
+                        string search, string sort, string type, DateTime startDate, DateTime endDate)
     {
-        var entities = await _mediator.Send(new GetScheduleEventsQuery(pageNumber, pageSize));
+        var entities = await _mediator.Send(new GetScheduleEventsQuery(pageNumber, pageSize, search, sort, type, startDate, endDate));
         return entities.MapToResponseList();
     }
 

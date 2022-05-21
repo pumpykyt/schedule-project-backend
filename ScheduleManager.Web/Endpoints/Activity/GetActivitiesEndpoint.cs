@@ -5,7 +5,7 @@ using ScheduleManager.Domain.Interfaces;
 
 namespace ScheduleManager.Web.Endpoints.Activity;
 
-public class GetActivitiesEndpoint : Endpoint<PagedRequest, List<ActivityResponse>>
+public class GetActivitiesEndpoint : EndpointWithoutRequest<List<ActivityResponse>>
 {
     private readonly IActivityService _activityService;
 
@@ -21,7 +21,7 @@ public class GetActivitiesEndpoint : Endpoint<PagedRequest, List<ActivityRespons
         AllowAnonymous();
     }
 
-    public override async Task HandleAsync(PagedRequest req, CancellationToken ct)
+    public override async Task HandleAsync(CancellationToken ct)
     {
         var pageNumber = Route<int>("pageNumber");
         var pageSize = Route<int>("pageSize");

@@ -17,10 +17,20 @@ public class GetActivitiesEndpoint : Endpoint<PagedRequest, List<ActivityRespons
     public override void Configure()
     {
         Verbs(Http.GET);
-        Routes("api/activity/{pageNumber}/{pageSize}");
+        Routes("api/activity/{pageNumber}/{pageSize}/{search}/{sort}/{teacherName}");
         AllowAnonymous();
     }
 
     public override async Task HandleAsync(PagedRequest req, CancellationToken ct)
-        => await SendAsync(await _activityService.GetActivitiesAsync(req.PageNumber, req.PageSize));
+    {
+        var pageNumber = Route<int>("pageNumber");
+        var pageSize = Route<int>("pageSize");
+        var search = Route<string>("search");
+        var sort = Route<string>("sort");
+        var teacherName = Route<string>("teacherName");
+
+        var result = await _activityService.GetActivitiesAsync(pageNumber, pageSize, search, sort, teacherName);
+
+        await SendAsync(result);
+    }
 }

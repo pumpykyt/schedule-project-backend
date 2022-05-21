@@ -33,9 +33,10 @@ public class ActivityService : IActivityService
         return entity.MapToResponse();
     }
 
-    public async Task<List<ActivityResponse>> GetActivitiesAsync(int pageNumber, int pageSize)
+    public async Task<List<ActivityResponse>> GetActivitiesAsync(int pageNumber, int pageSize, string search, 
+                                                                 string sort, string teacherName)
     {
-        var entities = await _mediator.Send(new GetActivitiesQuery(pageNumber, pageSize));
+        var entities = await _mediator.Send(new GetActivitiesQuery(pageNumber, pageSize, search, sort, teacherName));
         return entities.MapToResponseList();
     }
 

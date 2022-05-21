@@ -35,6 +35,7 @@ public class ScheduleService : IScheduleService
 
     public async Task<List<ScheduleResponse>> GetSchedulesAsync(int pageNumber, int pageSize, string search, string sort)
     {
+        if (search == "%default%") search = string.Empty;
         var entities = await _mediator.Send(new GetSchedulesQuery(pageNumber, pageSize, search, sort));
         return entities.MapToResponseList();
     }

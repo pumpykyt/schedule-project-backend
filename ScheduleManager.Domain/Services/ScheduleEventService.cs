@@ -39,6 +39,8 @@ public class ScheduleEventService : IScheduleEventService
     public async Task<List<ScheduleEventResponse>> GetScheduleEventsAsync(int pageNumber, int pageSize,
                         string search, string sort, string type, DateTime startDate, DateTime endDate)
     {
+        if (search == "%default%") search = string.Empty;
+        if (type == "%default%") search = string.Empty;
         var entities = await _mediator.Send(new GetScheduleEventsQuery(pageNumber, pageSize, search, sort, type, startDate, endDate));
         return entities.MapToResponseList();
     }

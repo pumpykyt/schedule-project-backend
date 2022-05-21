@@ -5,7 +5,7 @@ using ScheduleManager.Domain.Interfaces;
 
 namespace ScheduleManager.Web.Endpoints.ScheduleEvent;
 
-public class GetScheduleEventsEndpoint : Endpoint<PagedRequest, List<ScheduleEventResponse>>
+public class GetScheduleEventsEndpoint : EndpointWithoutRequest<List<ScheduleEventResponse>>
 {
     private readonly IScheduleEventService _eventService;
 
@@ -14,10 +14,22 @@ public class GetScheduleEventsEndpoint : Endpoint<PagedRequest, List<ScheduleEve
     public override void Configure()
     {
         Verbs(Http.GET);
-        Routes("api/scheduleEvent/{pageNumber}/{pageSize}");
+        Routes("api/scheduleEvent/{pageNumber}/{pageSize}/{search}/{sort}/{type}/{startDate}/{endDate}");
         AllowAnonymous();
     }
 
-    public override async Task HandleAsync(PagedRequest req, CancellationToken ct)
-        => await SendAsync(await _eventService.GetScheduleEventsAsync(req.PageNumber, req.PageSize));
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        var pageNumber = Route<int>("pageNumber");
+        var pageSize = Route<int>("pageSize");
+        var search = Route<string>("search");
+        var sort = Route<string>("sort");
+        var type = Route<string>("type");
+        var startDate = Route<DateTime>("startDate");
+        var endDate = Route<DateTime>("endDate");
+
+        var result = await _eventService.GetScheduleEventsAsync(pageNumber, pageSize, search, 
+                                                                sort, type, startDate, endDate);
+        await SendAsync(result);
+    }
 }

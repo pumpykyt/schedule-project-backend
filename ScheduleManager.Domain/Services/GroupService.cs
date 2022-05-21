@@ -35,6 +35,7 @@ public class GroupService : IGroupService
 
     public async Task<List<GroupResponse>> GetGroupsAsync(int pageNumber, int pageSize, string search, string sort)
     {
+        if (search == "%default%") search = string.Empty;
         var entities = await _mediator.Send(new GetGroupsQuery(pageNumber, pageSize, search, sort));
         return entities.MapToResponseList();
     }

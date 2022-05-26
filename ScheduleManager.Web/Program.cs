@@ -80,8 +80,6 @@ builder.Services.AddAuthentication(x => {
     };
 });
 
-builder.Services.AddHealthChecks().AddDbContextCheck<DataContext>();
-builder.Services.AddHealthChecksUI().AddInMemoryStorage();
 
 var app = builder.Build();
 
@@ -100,27 +98,6 @@ app.UseHangfireDashboard();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapHangfireDashboard();
-    endpoints.MapHealthChecks("/healthcheck", new HealthCheckOptions()
-    {
-        ResponseWriter = async (context, report) =>
-        {
-            context.Response.ContentType = "application/json";
-            var response = new HealthCheckResponse
-            {
-                Status = report.Status.ToString(),
-                Checks = report.Entries.Select(t => new HealthCheck
-                {
-                    Component = t.Key,
-                    Status = t.Value.Status.ToString(),
-                    Description = t.Value.Description
-                }),
-                Duration = report.TotalDuration
-            };
-
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
-        }
-    });
-    endpoints.MapHealthChecksUI();
 });
 
 app.Run();

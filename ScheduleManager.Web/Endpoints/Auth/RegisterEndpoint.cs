@@ -17,7 +17,7 @@ public class RegisterEndpoint : Endpoint<RegisterRequest, AuthResponse>
     public override void Configure()
     {
         Verbs(Http.POST);
-        Routes("api/register");
+        Routes("api/auth/register");
         AllowAnonymous();
     }
 

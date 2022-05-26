@@ -7,7 +7,7 @@ public interface IScheduleService
 {
     Task CreateScheduleAsync(ScheduleCreateRequest model);
     Task<ScheduleResponse> GetScheduleByIdAsync(string id);
-    Task<List<ScheduleResponse>> GetSchedulesAsync(int pageNumber, int pageSize, string search, string sort);
+    Task<PagedResponse<ScheduleResponse>> GetSchedulesAsync(int pageNumber, int pageSize, string search, string sort);
     Task UpdateScheduleAsync(ScheduleUpdateRequest model);
     Task DeleteScheduleAsync(string id);
 }

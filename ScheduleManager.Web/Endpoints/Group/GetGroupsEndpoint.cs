@@ -5,7 +5,7 @@ using ScheduleManager.Domain.Interfaces;
 
 namespace ScheduleManager.Web.Endpoints.Group;
 
-public class GetGroupsEndpoint : EndpointWithoutRequest<List<GroupResponse>>
+public class GetGroupsEndpoint : EndpointWithoutRequest
 {
     private readonly IGroupService _groupService;
 

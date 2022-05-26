@@ -6,7 +6,7 @@ using ScheduleManager.Domain.Interfaces;
 
 namespace ScheduleManager.Web.Endpoints.Schedule;
 
-public class GetSchedulesEndpoint : EndpointWithoutRequest<List<ScheduleResponse>>
+public class GetSchedulesEndpoint : EndpointWithoutRequest
 {
     private readonly IScheduleService _scheduleService;
 

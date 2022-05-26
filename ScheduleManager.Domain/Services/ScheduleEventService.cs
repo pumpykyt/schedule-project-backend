@@ -36,13 +36,14 @@ public class ScheduleEventService : IScheduleEventService
         return entity.MapToResponse();
     }
 
-    public async Task<List<ScheduleEventResponse>> GetScheduleEventsAsync(int pageNumber, int pageSize,
+    public async Task<PagedResponse<ScheduleEventResponse>> GetScheduleEventsAsync(int pageNumber, int pageSize,
                         string search, string sort, string type, DateTime startDate, DateTime endDate)
     {
         if (search == "%default%") search = string.Empty;
         if (type == "%default%") search = string.Empty;
         var entities = await _mediator.Send(new GetScheduleEventsQuery(pageNumber, pageSize, search, sort, type, startDate, endDate));
-        return entities.MapToResponseList();
+        var totalCount = await _mediator.Send(new GetScheduleEventsCountQuery());
+        return new PagedResponse<ScheduleEventResponse>(entities.MapToResponseList(), pageNumber, pageSize, totalCount);
     }
 
     public async Task UpdateScheduleEventAsync(ScheduleEventUpdateRequest model)

@@ -5,7 +5,7 @@ using ScheduleManager.Domain.Interfaces;
 
 namespace ScheduleManager.Web.Endpoints.ScheduleEvent;
 
-public class GetScheduleEventsEndpoint : EndpointWithoutRequest<List<ScheduleEventResponse>>
+public class GetScheduleEventsEndpoint : EndpointWithoutRequest
 {
     private readonly IScheduleEventService _eventService;
 

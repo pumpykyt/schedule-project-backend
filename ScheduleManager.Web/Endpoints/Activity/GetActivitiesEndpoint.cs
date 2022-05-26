@@ -5,7 +5,7 @@ using ScheduleManager.Domain.Interfaces;
 
 namespace ScheduleManager.Web.Endpoints.Activity;
 
-public class GetActivitiesEndpoint : EndpointWithoutRequest<List<ActivityResponse>>
+public class GetActivitiesEndpoint : EndpointWithoutRequest
 {
     private readonly IActivityService _activityService;
 

@@ -7,7 +7,7 @@ using ScheduleManager.Data.Queries;
 
 namespace ScheduleManager.Data.Handlers;
 
-public class GetGroupsHandler : IRequestHandler<GetGroupsQuery, List<Group>>
+public class GetGroupsHandler : IRequestHandler<GetGroupsQuery, List<Group>>, IRequest<int>
 {
     private readonly DataContext _context;
 

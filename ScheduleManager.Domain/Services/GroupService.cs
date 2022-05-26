@@ -33,11 +33,12 @@ public class GroupService : IGroupService
         return entity.MapToResponse();
     }
 
-    public async Task<List<GroupResponse>> GetGroupsAsync(int pageNumber, int pageSize, string search, string sort)
+    public async Task<PagedResponse<GroupResponse>> GetGroupsAsync(int pageNumber, int pageSize, string search, string sort)
     {
         if (search == "%default%") search = string.Empty;
         var entities = await _mediator.Send(new GetGroupsQuery(pageNumber, pageSize, search, sort));
-        return entities.MapToResponseList();
+        var totalCount = await _mediator.Send(new GetGroupsCountQuery());
+        return new PagedResponse<GroupResponse>(entities.MapToResponseList(), pageNumber, pageSize, totalCount);
     }
 
     public async Task UpdateGroupAsync(GroupUpdateRequest model)

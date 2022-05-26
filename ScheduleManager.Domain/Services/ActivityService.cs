@@ -33,13 +33,14 @@ public class ActivityService : IActivityService
         return entity.MapToResponse();
     }
 
-    public async Task<List<ActivityResponse>> GetActivitiesAsync(int pageNumber, int pageSize, string search, 
+    public async Task<PagedResponse<ActivityResponse>> GetActivitiesAsync(int pageNumber, int pageSize, string search, 
                                                                  string sort, string teacherName)
     {
         if (search == "%default%") search = string.Empty;
         if (teacherName == "%default%") search = string.Empty;
         var entities = await _mediator.Send(new GetActivitiesQuery(pageNumber, pageSize, search, sort, teacherName));
-        return entities.MapToResponseList();
+        var totalCount = await _mediator.Send(new GetActivitiesCountQuery());
+        return new PagedResponse<ActivityResponse>(entities.MapToResponseList(), pageNumber, pageSize, totalCount);
     }
 
     public async Task UpdateActivityAsync(ActivityUpdateRequest model)

@@ -37,7 +37,8 @@ public class GroupService : IGroupService
     {
         if (search == "%default%") search = string.Empty;
         var entities = await _mediator.Send(new GetGroupsQuery(pageNumber, pageSize, search, sort));
-        return new PagedResponse<GroupResponse>(entities.MapToResponseList(), pageNumber, pageSize, entities.Count);
+        var totalCount = await _mediator.Send(new GetGroupsCountQuery());
+        return new PagedResponse<GroupResponse>(entities.MapToResponseList(), pageNumber, pageSize, totalCount);
     }
 
     public async Task UpdateGroupAsync(GroupUpdateRequest model)

@@ -37,7 +37,8 @@ public class ScheduleService : IScheduleService
     {
         if (search == "%default%") search = string.Empty;
         var entities = await _mediator.Send(new GetSchedulesQuery(pageNumber, pageSize, search, sort));
-        return new PagedResponse<ScheduleResponse>(entities.MapToResponseList(), pageNumber, pageSize, entities.Count);
+        var totalCount = await _mediator.Send(new GetSchedulesCountQuery());
+        return new PagedResponse<ScheduleResponse>(entities.MapToResponseList(), pageNumber, pageSize, totalCount);
     }
 
     public async Task UpdateScheduleAsync(ScheduleUpdateRequest model)

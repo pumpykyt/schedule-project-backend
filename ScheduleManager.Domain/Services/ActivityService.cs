@@ -39,7 +39,8 @@ public class ActivityService : IActivityService
         if (search == "%default%") search = string.Empty;
         if (teacherName == "%default%") search = string.Empty;
         var entities = await _mediator.Send(new GetActivitiesQuery(pageNumber, pageSize, search, sort, teacherName));
-        return new PagedResponse<ActivityResponse>(entities.MapToResponseList(), pageNumber, pageSize, entities.Count);
+        var totalCount = await _mediator.Send(new GetActivitiesCountQuery());
+        return new PagedResponse<ActivityResponse>(entities.MapToResponseList(), pageNumber, pageSize, totalCount);
     }
 
     public async Task UpdateActivityAsync(ActivityUpdateRequest model)

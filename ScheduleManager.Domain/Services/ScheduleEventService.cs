@@ -42,8 +42,7 @@ public class ScheduleEventService : IScheduleEventService
         if (search == "%default%") search = string.Empty;
         if (type == "%default%") search = string.Empty;
         var entities = await _mediator.Send(new GetScheduleEventsQuery(pageNumber, pageSize, search, sort, type, startDate, endDate));
-        var totalCount = await _mediator.Send(new GetScheduleEventsCountQuery());
-        return new PagedResponse<ScheduleEventResponse>(entities.MapToResponseList(), pageNumber, pageSize, totalCount);
+        return new PagedResponse<ScheduleEventResponse>(entities.MapToResponseList(), pageNumber, pageSize, entities.Count);
     }
 
     public async Task UpdateScheduleEventAsync(ScheduleEventUpdateRequest model)
